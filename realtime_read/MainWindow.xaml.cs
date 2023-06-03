@@ -108,7 +108,7 @@ namespace realtime_read
                     var value = new Dictionary<string, string>
                     {
                         { "Building", "F11" },
-                        { "Tagid", tagReads[0].EpcString }  // Assuming you're sending the first read. Modify as per your requirements.
+                        { "Tagid", tagReads[0].EpcString }
                     };
                     var content = new FormUrlEncodedContent(value);
                     await client.PostAsync("http://www.thzsoo.com/electronic-lab/api.php/tagid", content);
