@@ -69,23 +69,23 @@ namespace realtime_read
                 {
                     if (tagReads[i].EpcString != "E28011700000020FEBE848AD")
                     {
-                        sql = $"SELECT COUNT(*) FROM test WHERE tag_number = '{tagReads[i].EpcString}'";
+                        sql = $"SELECT COUNT(*) FROM read_tag WHERE tag = '{tagReads[i].EpcString}'";
                         cmd = new MySqlCommand(sql, conn);
                         int count = Convert.ToInt32(cmd.ExecuteScalar());
 
-                        DateTime currentDate = DateTime.Now;
-                        string timestamp = currentDate.ToString("yyyy-MM-dd HH:mm:ss");
-
                         if (count == 0)
                         {
-                            sql = $"INSERT INTO test (tag_number, date) VALUES ('{tagReads[i].EpcString}', '{timestamp}')";
+                            sql = "INSERT INTO read_tag (tag, date) VALUES (@tagNumber, NOW())";
+                            cmd = new MySqlCommand(sql, conn);
+                            cmd.Parameters.AddWithValue("@tagNumber", tagReads[i].EpcString);
                         }
                         else
                         {
-                            sql = $"UPDATE test SET date = '{timestamp}' WHERE tag_number = '{tagReads[i].EpcString}'";
+                            sql = "UPDATE read_tag SET date = NOW() WHERE tag = @tagNumber";
+                            cmd = new MySqlCommand(sql, conn);
+                            cmd.Parameters.AddWithValue("@tagNumber", tagReads[i].EpcString);
                         }
 
-                        cmd = new MySqlCommand(sql, conn);
                         cmd.ExecuteNonQuery();
                     }
                 }
